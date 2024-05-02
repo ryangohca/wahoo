@@ -7,4 +7,4 @@ def root():
     return render_template("home.html")
 
 if __name__ == '__main__':
-    app.run(debug=True) #to remove after everything is done
+    app.run(debug=False) #to remove after everything is done
