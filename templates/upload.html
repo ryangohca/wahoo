@@ -10,11 +10,14 @@
     <form method="POST" enctype="multipart/form-data" id="uploadForm" class="container">
         {{ uploadForm.hidden_tag() }}
 
-        {{ render_field(uploadForm.photo) }}
+        {{ render_field(uploadForm.photos) }}
         {{ render_field(uploadForm.rate) }}
         {{ render_field(uploadForm.description) }}
         {{ render_field(uploadForm.tags) }}
 
         <button type="submit" class="btn btn-primary mt-2 w-100"> Upload </button>
     </form>
+    {% if success is defined %}
+        <h2>Success!</h3>
+    {% endif %}
 {% endblock %}
