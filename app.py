@@ -1,4 +1,5 @@
 import random, string, os
+from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, url_for
 
@@ -19,7 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///app.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Optimisation
 app.config['SQLALCHEMY_ECHO'] = True # See all sql statements that are being run
 
-app.config['UPLOAD_FOLDER'] = "static\\images\\posts"
+app.config['UPLOAD_FOLDER'] = "static/images/posts"
 
 # Forms
 class LoginForm(FlaskForm):
@@ -101,7 +102,7 @@ def upload():
             for file in uploadForm.photos.data:
                 filename = secure_filename(file.filename)
                 new_filename = generateRandomName() + '.' + filename.split('.')[-1]
-                full_path = os.path.abspath(app.config['UPLOAD_FOLDER'] + "\\" + new_filename)
+                full_path = os.path.abspath(Path(app.config['UPLOAD_FOLDER']) / new_filename)
                 file.save(full_path)
                 image = Images(postID=post.id, imagePath=full_path)
                 db.session.add(image)
