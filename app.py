@@ -69,6 +69,10 @@ class Images(db.Model):
     postID = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
     imagePath = db.Column(db.String(100), nullable=False)
 
+# routes + other functions
+def generateRandomName(length=30):
+    return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
+
 @app.route('/')
 def root():
     return render_template("home.html")
@@ -96,7 +100,8 @@ def upload():
 
             for file in uploadForm.photos.data:
                 filename = secure_filename(file.filename)
-                full_path = app.config['UPLOAD_FOLDER'] + "\\" + filename
+                new_filename = generateRandomName() + '.' + filename.split('.')[-1]
+                full_path = os.path.abspath(app.config['UPLOAD_FOLDER'] + "\\" + new_filename)
                 file.save(full_path)
                 image = Images(postID=post.id, imagePath=full_path)
                 db.session.add(image)
