@@ -26,6 +26,23 @@
                 </a>
             </div>
         </nav>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar">
+            <div class="container-fluid" id="sub-header">
+                <a class="navbar-brand" href="#">
+                    SURPRISE ME
+                </a>
+                <a class="navbar-brand" href="#">
+                    FILTER
+                </a>
+                <a class="navbar-brand" href="{{url_for('upload')}}">
+                    POST
+                </a>
+                <form class="d-flex" role="search" href="#">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-dark" type="submit">Go</button>
+                </form>
+            </div>
+        </nav>
         {% block content %} {% endblock %}
     </body>
 </html>
