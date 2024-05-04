@@ -92,10 +92,14 @@ def generateUniqueUrl(title):
 def root():
     return render_template("home.html")
 
+"""
+uncomment if need to reset stuff
 @app.route('/reseteverything')
 def reseteverything():
-    __refresh()
+    db.drop_all()
+    db.create_all()
     return redirect(url_for('root'))
+"""
 
 @app.route('/login')
 def login():
@@ -128,9 +132,14 @@ def upload():
 
     return render_template('upload.html', uploadForm=uploadForm)
 
-def __refresh():
-    db.drop_all()
-    db.create_all()
+@app.route('/post/<url_title>')
+def post(url_title):
+    user_post = Posts.query.filter_by(url_title=url_title).first()
+    if user_post is None:
+        return "Page Not Found", 404
+    images = [image.imageName for image in Images.query.filter_by(postID=user_post.id).all()]
+    tags = user_post.tags.split(',')
+    return render_template("post.html", post=user_post, images=images, tags=tags)
 
 if __name__ == '__main__':
     app.run(debug=True) #to remove after everything is done
