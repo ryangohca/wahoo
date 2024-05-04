@@ -1,4 +1,4 @@
-import random, string, os
+import random, string, os, re
 from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, url_for
@@ -43,6 +43,7 @@ class UploadForm(FlaskForm):
         Optional(),
         FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
+    title = StringField("Title", validators=[InputRequired()])
     rate = IntegerField("Rate", validators=[InputRequired(), NumberRange(min=1, max=5)])
     description = TextAreaField("Description", validators=[InputRequired()])
     tags = SelectMultipleField(
@@ -59,6 +60,8 @@ db = SQLAlchemy(app)
 class Posts(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    url_title = db.Column(db.Text, unique=True, nullable=False)
+    title = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     tags = db.Column(db.Text, nullable=False)
@@ -68,11 +71,22 @@ class Images(db.Model):
     __tablename__ = 'images'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     postID = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
-    imagePath = db.Column(db.String(100), nullable=False)
+    imageName = db.Column(db.String(100), nullable=False)
 
 # routes + other functions
 def generateRandomName(length=30):
     return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(length))
+
+def generateUniqueUrl(title):
+    url = '_'.join(title.lower().strip().split(' '))
+    pattern = '[^a-zA-Z0-9-_]'
+    friendly_url = ''.join(re.split(pattern, url))
+    if Posts.query.filter_by(url_title=friendly_url).first() is not None:
+        additional_num = 2
+        while Posts.query.filter_by(url_title=friendly_url + '_' + str(additional_num)).first() is not None:
+            additional_num += 1
+        friendly_url += '_' + str(additional_num)
+    return friendly_url    
 
 @app.route('/')
 def root():
@@ -93,9 +107,11 @@ def upload():
     if request.method == "POST":
         if uploadForm.validate_on_submit():
             description = uploadForm.description.data
+            title = uploadForm.title.data
             rating = uploadForm.rate.data
             tags = ','.join(uploadForm.tags.data)
-            post = Posts(description=description, rating=rating, tags=tags)
+            url_title = generateUniqueUrl(title)
+            post = Posts(url_title=url_title, title=title, description=description, rating=rating, tags=tags)
             db.session.add(post)
             db.session.commit()
 
@@ -104,7 +120,7 @@ def upload():
                 new_filename = generateRandomName() + '.' + filename.split('.')[-1]
                 full_path = os.path.abspath(Path(app.config['UPLOAD_FOLDER']) / new_filename)
                 file.save(full_path)
-                image = Images(postID=post.id, imagePath=full_path)
+                image = Images(postID=post.id, imageName=new_filename)
                 db.session.add(image)
                 db.session.commit()
             
