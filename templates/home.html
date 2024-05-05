@@ -6,4 +6,7 @@
 {% block content %}
     <h1>A Favourite Hawker Food Sharing Platform Website </h1>
     <p> Hello! </p>
+    {% for post in database %}
+    <div style="border-style: solid; ">{{ post.title }} placeholder</div>
+    {% endfor %}
 {% endblock %}
