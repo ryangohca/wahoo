@@ -91,7 +91,7 @@ def generateUniqueUrl(title):
 @app.route('/')
 def root():
     contents = []
-    posts = Posts.query
+    posts = Posts.query.order_by(Posts.id.desc())
     for post in posts:
         ID = post.id
         image = Images.query.filter_by(postID=ID).first().imageName
@@ -100,7 +100,7 @@ def root():
     return render_template("home.html", contents=contents)
 
 """
-uncomment if need to reset stuff
+# uncomment if need to reset stuff
 @app.route('/reseteverything')
 def reseteverything():
     db.drop_all()
