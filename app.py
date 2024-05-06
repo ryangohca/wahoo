@@ -95,7 +95,8 @@ def root():
     for post in posts:
         ID = post.id
         image = Images.query.filter_by(postID=ID).first().imageName
-        contents.append((post, image))  #not done yet tryna figure out images
+        description = post.description[:150] + '...'
+        contents.append((post, image, description))  #not done yet tryna figure out images
     return render_template("home.html", contents=contents)
 
 """
