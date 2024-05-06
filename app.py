@@ -147,5 +147,11 @@ def post(url_title):
     tags = user_post.tags.split(',')
     return render_template("post.html", post=user_post, images=images, tags=tags)
 
+@app.route('/surprise')
+def surprise():
+    posts_url = [post.url_title for post in Posts.query]
+    url = random.choice(posts_url)
+    return redirect(url_for('post', url_title=url))
+
 if __name__ == '__main__':
     app.run(debug=True) #to remove after everything is done
