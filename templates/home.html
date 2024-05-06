@@ -6,7 +6,12 @@
 {% block content %}
     <h1>A Favourite Hawker Food Sharing Platform Website </h1>
     <p> Hello! </p>
-    {% for post in database %}
-    <div style="border-style: solid; ">{{ post.title }} placeholder</div>
+    {% for content in contents %}
+    <div>
+        <a href="{{url_for('post', url_title=content[0].url_title)}}">
+            <img src="../static/images/posts/{{content[1]}}" class="rounded mx-auto d-block" width="400"/>
+        </a>
+        <h1>{{content[0].title}}</h1>
+    </div>
     {% endfor %}
 {% endblock %}

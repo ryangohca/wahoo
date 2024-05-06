@@ -90,9 +90,13 @@ def generateUniqueUrl(title):
 
 @app.route('/')
 def root():
-    database = Posts.query
-    images = Images.query  #not done yet tryna figure out images
-    return render_template("home.html", database=database, images=images)
+    contents = []
+    posts = Posts.query
+    for post in posts:
+        ID = post.id
+        image = Images.query.filter_by(postID=ID).first().imageName
+        contents.append((post, image))  #not done yet tryna figure out images
+    return render_template("home.html", contents=contents)
 
 """
 uncomment if need to reset stuff
