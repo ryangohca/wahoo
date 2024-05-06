@@ -2,16 +2,21 @@
 {% from "_macros.html" import render_field with context %}
 
 {% block title %} Home {% endblock %}
+{% block otherScripts %} <link rel="stylesheet" href="home.css"> {% endblock %}
 {% block head %} {{ super() }} {% endblock %}
 {% block content %}
     <h1>A Favourite Hawker Food Sharing Platform Website </h1>
     <p> Hello! </p>
     {% for content in contents %}
-    <div>
-        <a href="{{url_for('post', url_title=content[0].url_title)}}">
-            <img src="../static/images/posts/{{content[1]}}" class="rounded mx-auto d-block" width="400"/>
-        </a>
-        <h1>{{content[0].title}}</h1>
+    <div class="d-flex justify-content-center">
+        <div class="card text-center" style="width: 600px;">
+            <a href="{{url_for('post', url_title=content[0].url_title)}}">
+                <img src="../static/images/posts/{{content[1]}}" class="rounded mx-auto d-block" width="400"/>
+            </a>
+            <div class="card-body">
+                <h1>{{content[0].title}}</h1>
+            </div>
+        </div>
     </div>
     {% endfor %}
 {% endblock %}
