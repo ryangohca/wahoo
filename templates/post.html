@@ -3,13 +3,19 @@
 {% block title %} {{post.title}} {% endblock %}
 {% block head %} {{ super() }} {% endblock %}
 {% block content %}
-    {% for image in images %}
-        <img src="../static/images/posts/{{image}}" class="rounded mx-auto d-block" width="400"/>
-    {% endfor %}
-    <div class="text-center">
-        <h1 class="text-capitalize"> {{post.title}} </h1>
-        <p> Rating: {{post.rating}} </p>
-        <div class="text-justify"> {{post.description}} </div>
-        <p> Tags: {% for tag in tags %} {{tag}}, {% endfor %} </p>
+    <div class="d-flex justify-content-center">
+        <div class="card" style="width: 100%; padding: 8px;">
+            {% for image in images %}
+                <img src="../static/images/posts/{{image}}" class="rounded mx-auto d-block" width="400"/>
+            {% endfor %}
+            <div class="text-center">
+                <h1 class="text-capitalize"> {{post.title}} </h1>
+                <p> Rating: {{post.rating}} </p>
+                <div class="text-justify"> {{post.description}} </div>
+                <p> Tags: {% for tag in tags %} {{tag}}, {% endfor %} </p>
+            </div>
+        </div>
     </div>
+    
+    
 {% endblock %}
