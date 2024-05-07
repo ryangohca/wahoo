@@ -88,10 +88,15 @@ def generateUniqueUrl(title):
         friendly_url += '_' + str(additional_num)
     return friendly_url    
 
-@app.route('/')
+@app.route('/',methods=['GET','POST'])
 def root():
     contents = []
-    posts = Posts.query.order_by(Posts.id.desc())
+    posts = []
+    if request.method == "POST":
+        if 'search' in request.form:
+            posts = Posts.query.filter(Posts.description.like(f"%{request.form['item']}%")).order_by(Posts.id.desc()).all()
+    else:
+        posts = Posts.query.order_by(Posts.id.desc())
     for post in posts:
         ID = post.id
         image = Images.query.filter_by(postID=ID).first().imageName

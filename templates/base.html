@@ -38,9 +38,9 @@
                 <a class="navbar-brand" href="{{url_for('upload')}}">
                     POST
                 </a>
-                <form class="d-flex" role="search" href="#">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-dark" type="submit">Go</button>
+                <form method="post" class="d-flex" href="{{url_for('root')}}">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="item">
+                    <button class="btn btn-outline-dark" type="submit" name="search">Go</button>
                 </form>
             </div>
         </nav>
