@@ -68,6 +68,10 @@ class UploadForm(FlaskForm):
             ('Western', 'Western'),
             ('Japanese', 'Japanese'),
             ('Chicken Rice', 'Chicken Rice')
+            ('Noodle', 'Noodle')
+            ('Bread','Bread')
+            ('Drinks','Drinks')
+            ('Others','Others')
         ])
 
 # databases
