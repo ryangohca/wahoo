@@ -67,10 +67,10 @@ class UploadForm(FlaskForm):
         choices=[
             ('Western', 'Western'),
             ('Japanese', 'Japanese'),
-            ('Chicken Rice', 'Chicken Rice')
-            ('Noodle', 'Noodle')
-            ('Bread','Bread')
-            ('Drinks','Drinks')
+            ('Chicken Rice', 'Chicken Rice'),
+            ('Noodle', 'Noodle'),
+            ('Bread','Bread'),
+            ('Drinks','Drinks'),
             ('Others','Others')
         ])
 
