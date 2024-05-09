@@ -119,14 +119,14 @@ def root():
         contents.append((post, image, description))  #not done yet tryna figure out images
     return render_template("home.html", contents=contents)
 
-"""
+
 # uncomment if need to reset stuff
 @app.route('/reseteverything')
 def reseteverything():
     db.drop_all()
     db.create_all()
     return redirect(url_for('root'))
-"""
+
 
 @app.route('/login')
 def login():
