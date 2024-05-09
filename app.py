@@ -23,12 +23,27 @@ app.config['SQLALCHEMY_ECHO'] = True # See all sql statements that are being run
 app.config['UPLOAD_FOLDER'] = "static/images/posts"
 
 # Forms
+
 class LoginForm(FlaskForm):
     username = StringField('Username', id="login-username", validators=[InputRequired()])
     password = PasswordField('Password', id="login-password", validators=[InputRequired()])
     remember_me = BooleanField('Remember Me', id="login-remember_me")
     
     formName = HiddenField(default="login", id="login-formName")
+    
+    def validate_username(form, field):
+        username = field.data.strip()
+        pass
+            
+    def validate_password(form, field):
+        password = field.data.strip()
+        pass
+
+class SignUpForm(FlaskForm):
+    username = StringField('Username', id="signup-username", validators=[InputRequired()])
+    password = PasswordField('Password', id="signup-password", validators=[InputRequired()])
+    repeatPassword = PasswordField('Repeat Password', id="signup-password", validators=[InputRequired()])
+    formName = HiddenField(default="signup", id="signup-formName")
     
     def validate_username(form, field):
         username = field.data.strip()
@@ -116,6 +131,10 @@ def reseteverything():
 @app.route('/login')
 def login():
     return render_template('login.html', loginForm=LoginForm())
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html', signUpForm=SignUpForm())
 
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
