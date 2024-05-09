@@ -38,7 +38,9 @@
             <div class="text-center">
                 <h1 class="text-capitalize"> {{post.title}} </h1>
                 <p> Rating: {{post.rating}} </p>
-                <div class="text-justify"> {{post.description}} </div>
+                {% for paragraph in post.description.split('\n') %}
+                    <p style="text-align: justify;"> {{paragraph}} </p>
+                {% endfor %}
                 <p> Tags: {% for tag in tags %} {{tag}}, {% endfor %} </p>
             </div>
         </div>
