@@ -55,7 +55,7 @@ class SignUpForm(FlaskForm):
 
 class UploadForm(FlaskForm):
     photos = MultipleFileField('Image', validators=[
-        Optional(),
+        FileRequired(),
         FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
     title = StringField("Title", validators=[InputRequired()])
@@ -63,7 +63,7 @@ class UploadForm(FlaskForm):
     description = TextAreaField("Description", validators=[InputRequired()])
     tags = SelectMultipleField(
         'Tags (ctrl-click to select multiple tags):',
-        validators=[Optional()],
+        validators=[InputRequired()],
         choices=[
             ('Western', 'Western'),
             ('Japanese', 'Japanese'),
