@@ -73,6 +73,20 @@ class UploadForm(FlaskForm):
             ('Drinks','Drinks'),
             ('Others','Others')
         ])
+    
+class FilterForm(FlaskForm):
+    tags = SelectMultipleField(
+        'Tags (ctrl-click to select multiple tags):',
+        validators=[InputRequired()],
+        choices=[
+            ('Western', 'Western'),
+            ('Japanese', 'Japanese'),
+            ('Chicken Rice', 'Chicken Rice'),
+            ('Noodle', 'Noodle'),
+            ('Bread','Bread'),
+            ('Drinks','Drinks'),
+            ('Others','Others')
+        ])
 
 # databases
 db = SQLAlchemy(app)
@@ -105,7 +119,15 @@ def generateUniqueUrl(title):
         while Posts.query.filter_by(url_title=friendly_url + '_' + str(additional_num)).first() is not None:
             additional_num += 1
         friendly_url += '_' + str(additional_num)
-    return friendly_url    
+    return friendly_url  
+
+def filterByTags(tags):
+    result = set()
+    for tag in tags:
+        filtered = set(Posts.query.filter(Posts.tags.like(f"%{tag}%")).all()) 
+        print(tag,filtered) 
+        result = result.union(filtered)
+    return list(result)
 
 @app.route('/',methods=['GET','POST'])
 def root():
@@ -114,6 +136,9 @@ def root():
     if request.method == "POST":
         if 'search' in request.form:
             posts = Posts.query.filter(Posts.description.like(f"%{request.form['item']}%")).order_by(Posts.id.desc()).all()
+        elif 'filter' in request.form:
+            print(request.form)
+            posts = filterByTags(request.form['tags'])
     else:
         posts = Posts.query.order_by(Posts.id.desc())
     for post in posts:
@@ -181,6 +206,10 @@ def surprise():
     posts_url = [post.url_title for post in Posts.query]
     url = random.choice(posts_url)
     return redirect(url_for('post', url_title=url))
+
+@app.route('/filter')
+def filter():
+    return render_template("filter.html", filterForm=FilterForm())
 
 if __name__ == '__main__':
     app.run(debug=True) #to remove after everything is done
